@@ -4,7 +4,10 @@ var pkgjson = require('./package.json');
 var config = {
   pkg: pkgjson,
   app: 'src',
-  dist: 'dist'
+  dist: 'dist',
+  bower:{
+    directory : 'bower_components'
+  }
 }
 
 module.exports = function (grunt) {
@@ -13,7 +16,8 @@ module.exports = function (grunt) {
   grunt.initConfig({
     config: config,
     pkg: config.pkg,
-    bower: grunt.file.readJSON('./.bowerrc'),
+    //bower: grunt.file.readJSON('./.bowerrc'),
+    bower: config.bower,
     copy: {
       dist: {
        files: [{
@@ -39,8 +43,7 @@ module.exports = function (grunt) {
         files: {
           '<%= config.dist %>/js/lib.min.js': [
             '<%= bower.directory %>/jquery/jquery.js',
-            '<%= bower.directory %>/underscore/underscore.js',
-            '<%= bower.directory %>/requirejs/require.js',
+            '<%= bower.directory %>/underscore/underscore.js'
           ]
         }
       }
