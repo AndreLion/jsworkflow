@@ -26,3 +26,16 @@ node_modules
 
 # Users Environment Variables
 .lock-wscript
+
+# Vim tmp file
+*.swp
+
+# Bower
+bower_components
+
+# release and build
+head
+tag
+commit
+tmp
+release
