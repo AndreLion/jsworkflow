@@ -4,7 +4,7 @@ var pkgjson = require('./package.json');
 var config = {
   pkg: pkgjson,
   app: 'src',
-  dist: 'dist',
+  dist: 'src/lib',
   bower:{
     directory : 'bower_components'
   }
@@ -18,18 +18,38 @@ module.exports = function (grunt) {
     pkg: config.pkg,
     //bower: grunt.file.readJSON('./.bowerrc'),
     bower: config.bower,
+    concat: {
+      options: {
+        banner: '/*! <%= pkg.name %> lib concat files - v<%= pkg.version %> -' +
+          '<%= grunt.template.today("yyyy-mm-dd") %> */\n'
+      },
+      js: {
+          src: [
+            '<%= bower.directory %>/jquery/dist/jquery.min.js',
+            '<%= bower.directory %>/underscore/underscore-min.js'
+          ],
+          dest: '<%= config.dist %>/js/lib.min.js',
+      },
+      css: {
+          src: [
+            '<%= bower.directory %>/bootstrap/dist/css/bootstrap.min.css',
+            '<%= bower.directory %>/font-awesome/css/font-awesome.min.css'
+          ],
+          dest: '<%= config.dist %>/css/lib.min.css',
+      }
+    },
     copy: {
-      dist: {
+      fonts: {
        files: [{
          expand: true,
-         cwd: '<%= config.app %>/_lib/font-awesome',
-         src: 'css/font-awesome.min.css',
+         cwd: '<%= bower.directory %>/bootstrap/dist',
+         src: ['fonts/*'],
          dest: '<%= config.dist %>'
        },
        {
          expand: true,
-         cwd: '<%= config.app %>/_lib/font-awesome',
-         src: 'fonts/*',
+         cwd: '<%= bower.directory %>/font-awesome',
+         src: ['fonts/*'],
          dest: '<%= config.dist %>'
        }]
       }
@@ -39,10 +59,10 @@ module.exports = function (grunt) {
         banner: '/*! <%= pkg.name %> lib - v<%= pkg.version %> -' +
           '<%= grunt.template.today("yyyy-mm-dd") %> */'
       },
-      dist: {
+      build: {
         files: {
           '<%= config.dist %>/js/lib.min.js': [
-            '<%= bower.directory %>/jquery/jquery.js',
+            '<%= bower.directory %>/jquery/dist/jquery.js',
             '<%= bower.directory %>/underscore/underscore.js'
           ]
         }
@@ -50,11 +70,13 @@ module.exports = function (grunt) {
     }
   });
 
+  //grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
 
   grunt.registerTask('default', [
-    'copy',
-    'uglify'
+    'concat',
+    'copy'
+    //'uglify'
   ]);
 };
