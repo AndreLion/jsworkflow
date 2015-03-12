@@ -1,0 +1,30 @@
+{
+  "name": "jsworkflow",
+  "version": "1.0.0",
+  "description": "Develop, Test, Deploy, Release via Javascript",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AndreLion/jsworkflow.git"
+  },
+  "keywords": [
+    "javascript"
+  ],
+  "author": "Andre",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndreLion/jsworkflow/issues"
+  },
+  "homepage": "https://github.com/AndreLion/jsworkflow",
+  "dependencies": {
+    "express": "^4.12.2"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-contrib-uglify": "^0.8.0"
+  }
+}
