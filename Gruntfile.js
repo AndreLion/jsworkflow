@@ -51,6 +51,12 @@ module.exports = function (grunt) {
          cwd: '<%= bower.directory %>/font-awesome',
          src: ['fonts/*'],
          dest: '<%= config.dist %>'
+       },
+       {
+         expand: true,
+         cwd: '<%= bower.directory %>/underscore',
+         src: ['*.map'],
+         dest: '<%= config.dist %>/js'
        }]
       }
     },
