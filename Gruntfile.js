@@ -2,74 +2,118 @@
 var pkgjson = require('./package.json');
 
 var config = {
-    pkg: pkgjson,
-    dist: 'src/lib',
-    bower:{
-        directory : 'bower_components'
-    }
+    //pkg: pkgjson,
+}
+
+var CONST = {
+    //dist: 'src/',
+    bower: 'bower_components'
+};
+
+var files = {
+    jslib : [
+        CONST.bower + '/jquery/dist/jquery.min.js',
+        CONST.bower + '/underscore/underscore-min.js'
+    ],
+    csslib : [
+        CONST.bower + '/bootstrap/dist/css/bootstrap.min.css',
+        CONST.bower + '/font-awesome/css/font-awesome.min.css'
+    ]
 }
 
 module.exports = function (grunt) {
 
     // Configuration
     grunt.initConfig({
-        config: config,
-        pkg: config.pkg,
-        bower: config.bower,
+        CONST:CONST,
         concat: {
             options: {
-                banner: '/*! <%= pkg.name %> lib concat files - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+                //banner: '/*! <%= pkg.name %> lib concat files - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
-            js: {
-                src: [
-                '<%= bower.directory %>/jquery/dist/jquery.min.js',
-                '<%= bower.directory %>/underscore/underscore-min.js'
-                ],
-                dest: '<%= config.dist %>/js/lib.min.js'
+            src_jslib: {
+                src: files.jslib,
+                dest: 'src/lib/js/lib.min.js'
             },
-            css: {
-                src: [
-                    '<%= bower.directory %>/bootstrap/dist/css/bootstrap.min.css',
-                    '<%= bower.directory %>/font-awesome/css/font-awesome.min.css'
-                ],
-                dest: '<%= config.dist %>/css/lib.min.css'
+            src_csslib: {
+                src: files.csslib,
+                dest: 'src/lib/css/lib.min.css'
+            },
+            head_jslib: {
+                src: files.jslib,
+                dest: 'head/debug/lib/js/lib.min.js'
+            },
+            head_csslib: {
+                src: files.csslib,
+                dest: 'head/debug/lib/css/lib.min.css'
             }
-            //head_js: {
-            //    src: [
-            //    '<%= bower.directory %>/jquery/dist/jquery.min.js',
-            //    '<%= bower.directory %>/underscore/underscore-min.js'
-            //    ],
-            //    dest: 'head/lib/js/lib.min.js'
-            //},
-            //head_css: {
-            //    src: [
-            //        '<%= bower.directory %>/bootstrap/dist/css/bootstrap.min.css',
-            //        '<%= bower.directory %>/font-awesome/css/font-awesome.min.css'
-            //    ],
-            //    dest: 'head/lib/css/lib.min.css'
-            //}
         },
         copy: {
             fonts: {
                 files: [{
                     expand: true,
-                    cwd: '<%= bower.directory %>/bootstrap/dist',
+                    cwd: '<%= CONST.bower %>/bootstrap/dist',
                     src: ['fonts/*'],
-                    dest: '<%= config.dist %>'
+                    dest: 'src/lib'
                 },
                 {
                     expand: true,
-                    cwd: '<%= bower.directory %>/font-awesome',
+                    cwd: '<%= CONST.bower %>/font-awesome',
                     src: ['fonts/*'],
-                    dest: '<%= config.dist %>'
+                    dest: 'src/lib'
                 }]
             },
             map : {
                 files: [{
                     expand: true,
-                    cwd: '<%= bower.directory %>/underscore',
+                    cwd: '<%= CONST.bower %>/underscore',
                     src: ['*.map'],
-                    dest: '<%= config.dist %>/js'
+                    dest: 'src/lib/js'
+                }]
+            },
+            headmap : {
+                files: [{
+                    expand: true,
+                    cwd: '<%= CONST.bower %>/underscore',
+                    src: ['*.map'],
+                    dest: 'head/debug/lib/js'
+                }]
+            },
+            headfonts: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= CONST.bower %>/bootstrap/dist',
+                    src: ['fonts/*'],
+                    dest: 'head/debug/lib'
+                },
+                {
+                    expand: true,
+                    cwd: '<%= CONST.bower %>/font-awesome',
+                    src: ['fonts/*'],
+                    dest: 'head/debug/lib'
+                }]
+            },
+            headlib_release : {
+                files: [{
+                    expand: true,
+                    cwd: 'head/debug',
+                    src: ['lib/**/*.*'],
+                    dest: 'head/release'
+                }]
+            },
+            headsrc: {
+                files: [{
+                    expand: true,
+                    cwd: 'tmp/src/',
+                    src: ['**/*',  '!**/lib/**'],
+                    dest: 'head/debug'
+                }]
+            },
+            headsrc_release: {
+                files: [{
+                    expand: true,
+                    cwd: 'tmp/src/',
+                    src: ['**/*',  '!**/lib/**'],
+                    dest: 'head/release'
                 }]
             }
         },
@@ -88,9 +132,8 @@ module.exports = function (grunt) {
         jshint: {
             all: ['src/js/**/*.js']
         },
-        uglify: {
+        /*uglify: {
             options: {
-                banner: '/*! <%= pkg.name %> lib - v<%= pkg.version %> -' + '<%= grunt.template.today("yyyy-mm-dd") %> */'
             },
             build: {
                 files: {
@@ -100,7 +143,7 @@ module.exports = function (grunt) {
                     ]
                 }
             }
-        },
+        },*/
         gitclone : {
             head: {
                 options: {
@@ -113,6 +156,18 @@ module.exports = function (grunt) {
         clean :{
             tmp :{
                 src: ['tmp']
+            },
+            head :{
+                src: ['head']
+            }
+        },
+        processhtml :{
+            options: {
+            },
+            head:{
+                files: {
+                    'tmp/src/index.html': ['tmp/src/index.html']
+                }
             }
         }
     });
@@ -124,16 +179,28 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-git');
+    grunt.loadNpmTasks('grunt-processhtml');
 
     grunt.registerTask('default', [
-        'concat',
-        'copy',
+        'concat:src_jslib',
+        'concat:src_csslib',
+        'copy:fonts',
+        'copy:map',
         'jshint',
         'watch'
     ]);
 
     grunt.registerTask('head', [
-        'clean',
-        'gitclone'
+        'clean:tmp',
+        'gitclone:head',
+        'processhtml:head',
+        'clean:head',
+        'concat:head_jslib',
+        'concat:head_csslib',
+        'copy:headfonts',
+        'copy:headmap',
+        'copy:headlib_release',
+        'copy:headsrc',
+        'copy:headsrc_release'
     ]);
 };
