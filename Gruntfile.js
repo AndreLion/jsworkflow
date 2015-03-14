@@ -3,7 +3,6 @@ var pkgjson = require('./package.json');
 
 var config = {
   pkg: pkgjson,
-  app: 'src',
   dist: 'src/lib',
   bower:{
     directory : 'bower_components'
@@ -16,7 +15,6 @@ module.exports = function (grunt) {
   grunt.initConfig({
     config: config,
     pkg: config.pkg,
-    //bower: grunt.file.readJSON('./.bowerrc'),
     bower: config.bower,
     concat: {
       options: {
@@ -51,14 +49,31 @@ module.exports = function (grunt) {
          cwd: '<%= bower.directory %>/font-awesome',
          src: ['fonts/*'],
          dest: '<%= config.dist %>'
-       },
-       {
+       }]
+      },
+      map : {
+       files: [{
          expand: true,
          cwd: '<%= bower.directory %>/underscore',
          src: ['*.map'],
          dest: '<%= config.dist %>/js'
        }]
       }
+    },
+    watch: {
+        jshint: {
+            files: ['src/js/**/*.js'],
+            tasks: ['jshint']
+        },
+        reload: {
+            files: ['src/**/*.*'],
+            options: {
+                livereload: true
+            }
+        }
+    },
+    jshint: {
+        all: ['src/js/**/*.js']
     },
     uglify: {
       options: {
@@ -79,10 +94,18 @@ module.exports = function (grunt) {
   //grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   grunt.registerTask('default', [
     'concat',
-    'copy'
+    'copy',
+    'jshint',
+    'watch',
     //'uglify'
+  ]);
+
+  grunt.registerTask('head', [
+    'copy'
   ]);
 };
