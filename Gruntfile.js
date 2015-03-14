@@ -34,6 +34,20 @@ module.exports = function (grunt) {
                 ],
                 dest: '<%= config.dist %>/css/lib.min.css'
             }
+            //head_js: {
+            //    src: [
+            //    '<%= bower.directory %>/jquery/dist/jquery.min.js',
+            //    '<%= bower.directory %>/underscore/underscore-min.js'
+            //    ],
+            //    dest: 'head/lib/js/lib.min.js'
+            //},
+            //head_css: {
+            //    src: [
+            //        '<%= bower.directory %>/bootstrap/dist/css/bootstrap.min.css',
+            //        '<%= bower.directory %>/font-awesome/css/font-awesome.min.css'
+            //    ],
+            //    dest: 'head/lib/css/lib.min.css'
+            //}
         },
         copy: {
             fonts: {
@@ -86,6 +100,20 @@ module.exports = function (grunt) {
                     ]
                 }
             }
+        },
+        gitclone : {
+            head: {
+                options: {
+                    repository: 'https://github.com/AndreLion/jsworkflow.git',
+                    branch: 'master',
+                    directory: 'tmp'
+                }
+            }
+        },
+        clean :{
+            tmp :{
+                src: ['tmp']
+            }
         }
     });
 
@@ -94,16 +122,18 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-git');
 
     grunt.registerTask('default', [
         'concat',
         'copy',
         'jshint',
-        'watch',
-        //'uglify'
+        'watch'
     ]);
 
     grunt.registerTask('head', [
-        'copy'
+        'clean',
+        'gitclone'
     ]);
 };
