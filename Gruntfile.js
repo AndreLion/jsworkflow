@@ -166,12 +166,12 @@ module.exports = function (grunt) {
             },
             head:{
                 files: {
-                    'tmp/src/index.html': ['tmp/src/index.html']
+                    'head/debug/index.html': ['head/debug/index.html'],
+                    'head/release/index.html': ['head/release/index.html']
                 }
             },
             release:{
                 files: {
-                    'head/debug/index.html': ['head/debug/index.html'],
                     'head/release/index.html': ['head/release/index.html']
                 }
             }
@@ -208,6 +208,7 @@ module.exports = function (grunt) {
         'copy:headlib_release',
         'copy:headsrc',
         'copy:headsrc_release',
+        'processhtml:head',
         'processhtml:release'
     ]);
 };
