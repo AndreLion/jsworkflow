@@ -3,6 +3,12 @@ var vhost = require('vhost');
 
 var app = express();
 
+app.all('/lib/fonts/*.*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+});
+
 app.use(vhost('src.localdev', express().use(express.static('src'))));
 
 app.use(vhost('head.localdev', express().use(express.static('head/release'))));
