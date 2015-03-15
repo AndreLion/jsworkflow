@@ -168,6 +168,12 @@ module.exports = function (grunt) {
                 files: {
                     'tmp/src/index.html': ['tmp/src/index.html']
                 }
+            },
+            release:{
+                files: {
+                    'head/debug/index.html': ['head/debug/index.html'],
+                    'head/release/index.html': ['head/release/index.html']
+                }
             }
         }
     });
@@ -193,7 +199,7 @@ module.exports = function (grunt) {
     grunt.registerTask('head', [
         'clean:tmp',
         'gitclone:head',
-        'processhtml:head',
+        //'processhtml:head',
         'clean:head',
         'concat:head_jslib',
         'concat:head_csslib',
@@ -201,6 +207,7 @@ module.exports = function (grunt) {
         'copy:headmap',
         'copy:headlib_release',
         'copy:headsrc',
-        'copy:headsrc_release'
+        'copy:headsrc_release',
+        'processhtml:release'
     ]);
 };
