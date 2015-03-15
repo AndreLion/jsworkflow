@@ -132,18 +132,23 @@ module.exports = function (grunt) {
         jshint: {
             all: ['src/js/**/*.js']
         },
-        /*uglify: {
+        uglify: {
             options: {
             },
-            build: {
+            head: {
                 files: {
-                    '<%= config.dist %>/js/lib.min.js': [
-                        '<%= bower.directory %>/jquery/dist/jquery.js',
-                        '<%= bower.directory %>/underscore/underscore.js'
-                    ]
+                    'head/release/js/intro.js': ['head/release/js/intro.js'],
+
                 }
             }
-        },*/
+        },
+        cssmin: {
+            head:{
+                files: {
+                    'head/release/css/base.css': ['head/release/css/base.css']
+                }
+            }
+        },
         gitclone : {
             head: {
                 options: {
@@ -178,7 +183,7 @@ module.exports = function (grunt) {
         }
     });
 
-    //grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -186,6 +191,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-git');
     grunt.loadNpmTasks('grunt-processhtml');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
 
     grunt.registerTask('default', [
         'concat:src_jslib',
@@ -209,6 +215,8 @@ module.exports = function (grunt) {
         'copy:headsrc',
         'copy:headsrc_release',
         'processhtml:head',
+        'uglify:head',
+        'cssmin:head',
         'processhtml:release'
     ]);
 };
