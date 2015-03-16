@@ -17,4 +17,7 @@ app.use(vhost('head.localcdn', express().use(express.static('head/release'))));
 app.use(vhost('debug.head.localdev', express().use(express.static('head/debug'))));
 app.use(vhost('debug.head.localcdn', express().use(express.static('head/debug'))));
 
+app.use(vhost('localdev', express().use(express.static('release'))));
+app.use(vhost('localcdn', express().use(express.static('release'))));
+
 app.listen(3000);

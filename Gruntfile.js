@@ -45,6 +45,14 @@ module.exports = function (grunt) {
             head_csslib: {
                 src: files.csslib,
                 dest: 'head/debug/lib/css/lib.min.css'
+            },
+            release_jslib: {
+                src: files.jslib,
+                dest: 'release/lib/js/lib.min.js'
+            },
+            release_csslib: {
+                src: files.csslib,
+                dest: 'release/lib/css/lib.min.css'
             }
         },
         copy: {
@@ -78,6 +86,14 @@ module.exports = function (grunt) {
                     dest: 'head/debug/lib/js'
                 }]
             },
+            releasemap : {
+                files: [{
+                    expand: true,
+                    cwd: '<%= CONST.bower %>/underscore',
+                    src: ['*.map'],
+                    dest: 'release/lib/js'
+                }]
+            },
             headfonts: {
                 files: [{
                     expand: true,
@@ -90,6 +106,20 @@ module.exports = function (grunt) {
                     cwd: '<%= CONST.bower %>/font-awesome',
                     src: ['fonts/*'],
                     dest: 'head/debug/lib'
+                }]
+            },
+            releasefonts: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= CONST.bower %>/bootstrap/dist',
+                    src: ['fonts/*'],
+                    dest: 'release/lib'
+                },
+                {
+                    expand: true,
+                    cwd: '<%= CONST.bower %>/font-awesome',
+                    src: ['fonts/*'],
+                    dest: 'release/lib'
                 }]
             },
             headlib_release : {
@@ -108,12 +138,28 @@ module.exports = function (grunt) {
                     dest: 'head/debug'
                 }]
             },
+            releasesrc: {
+                files: [{
+                    expand: true,
+                    cwd: 'tmp/src/',
+                    src: ['**/*',  '!**/lib/**'],
+                    dest: 'release'
+                }]
+            },
             headsrc_release: {
                 files: [{
                     expand: true,
                     cwd: 'tmp/src/',
                     src: ['**/*',  '!**/lib/**'],
                     dest: 'head/release'
+                }]
+            },
+            release_head:{
+                files: [{
+                    expand: true,
+                    cwd: 'head/release',
+                    src: ['**/*.*'],
+                    dest: 'release'
                 }]
             }
         },
@@ -140,12 +186,23 @@ module.exports = function (grunt) {
                     'head/release/js/intro.js': ['head/release/js/intro.js'],
 
                 }
+            },
+            release: {
+                files: {
+                    'release/js/intro.js': ['release/js/intro.js'],
+
+                }
             }
         },
         cssmin: {
             head:{
                 files: {
                     'head/release/css/base.css': ['head/release/css/base.css']
+                }
+            },
+            release:{
+                files: {
+                    'release/css/base.css': ['release/css/base.css']
                 }
             }
         },
@@ -164,6 +221,9 @@ module.exports = function (grunt) {
             },
             head :{
                 src: ['head']
+            },
+            release :{
+                src: ['release']
             }
         },
         processhtml :{
@@ -205,7 +265,6 @@ module.exports = function (grunt) {
     grunt.registerTask('head', [
         'clean:tmp',
         'gitclone:head',
-        //'processhtml:head',
         'clean:head',
         'concat:head_jslib',
         'concat:head_csslib',
@@ -219,4 +278,39 @@ module.exports = function (grunt) {
         'cssmin:head',
         'processhtml:release'
     ]);
+
+    grunt.registerTask('release', 'Release Task', function(arg1, arg2) {
+        //grunt.log.writeln('arg1: ' + arg1);
+        //grunt.log.writeln('arg2: ' + arg2);
+        //grunt.log.writeln('arg lens: ' + arguments.length);
+        var len = arguments.length;
+        switch(len){
+            case 0:
+                grunt.log.writeln(this.name + ", no args");
+                break;
+            case 1:
+                if(arg1 === 'head'){
+                    grunt.log.writeln(this.name + " from " + arg1);
+                    //grunt.task.run('copy:release_head');
+                    grunt.task.run([
+                        'clean:tmp',
+                        'gitclone:head',
+                        'clean:release',
+                        'concat:release_jslib',
+                        'concat:release_csslib',
+                        'copy:releasefonts',
+                        'copy:releasemap',
+                        //'copy:headlib_release',
+                        'copy:releasesrc',
+                        //'copy:headsrc_release',
+                        'processhtml:head',
+                        'uglify:release',
+                        'cssmin:release',
+                        'processhtml:release'
+                    ]);
+                }else{
+                }
+                break
+        }
+    });
 };
