@@ -239,6 +239,11 @@ module.exports = function (grunt) {
                     'head/release/index.html': ['head/release/index.html'],
                     'release/index.html': ['release/index.html']
                 }
+            },
+            production:{
+                files: {
+                    'release/index.html': ['release/index.html']
+                }
             }
         }
     });
@@ -306,7 +311,8 @@ module.exports = function (grunt) {
                         //'processhtml:head',
                         'uglify:release',
                         'cssmin:release',
-                        'processhtml:release'
+                        'processhtml:release',
+                        'processhtml:production'
                     ]);
                 }else{
                 }
