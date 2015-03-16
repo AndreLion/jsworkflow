@@ -231,7 +231,8 @@ module.exports = function (grunt) {
             },
             head:{
                 files: {
-                    'head/debug/index.html': ['head/debug/index.html']
+                    'head/debug/index.html': ['head/debug/index.html'],
+                    'head/release/index.html': ['head/release/index.html']
                 }
             },
             release:{
