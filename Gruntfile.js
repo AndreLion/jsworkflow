@@ -231,13 +231,13 @@ module.exports = function (grunt) {
             },
             head:{
                 files: {
-                    'head/debug/index.html': ['head/debug/index.html'],
-                    'head/release/index.html': ['head/release/index.html']
+                    'head/debug/index.html': ['head/debug/index.html']
                 }
             },
             release:{
                 files: {
-                    'head/release/index.html': ['head/release/index.html']
+                    'head/release/index.html': ['head/release/index.html'],
+                    'release/index.html': ['release/index.html']
                 }
             }
         }
@@ -303,7 +303,7 @@ module.exports = function (grunt) {
                         //'copy:headlib_release',
                         'copy:releasesrc',
                         //'copy:headsrc_release',
-                        'processhtml:head',
+                        //'processhtml:head',
                         'uglify:release',
                         'cssmin:release',
                         'processhtml:release'
