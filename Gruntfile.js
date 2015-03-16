@@ -241,7 +241,7 @@ module.exports = function (grunt) {
                     'release/index.html': ['release/index.html']
                 }
             },
-            production:{
+            prod:{
                 files: {
                     'release/index.html': ['release/index.html']
                 }
@@ -313,7 +313,7 @@ module.exports = function (grunt) {
                         'uglify:release',
                         'cssmin:release',
                         'processhtml:release',
-                        'processhtml:production'
+                        'processhtml:prod'
                     ]);
                 }else{
                 }
